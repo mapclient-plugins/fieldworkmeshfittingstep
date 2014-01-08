@@ -21,6 +21,22 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
     for new steps.
     '''
 
+    # maps config keys to fitting function argument names
+    _fitConfigDict = {}
+    _fitConfigDict['mesh discretisation'] = 'GD'
+    _fitConfigDict['sobelov discretisation'] = 'sobD'
+    _fitConfigDict['sobelov weight'] = 'sobW'
+    _fitConfigDict['normal discretisation'] = 'normalD'
+    _fitConfigDict['normal weight'] = 'normalW'
+    _fitConfigDict['max sub-iterations'] = 'itMaxPerIt'
+    _fitConfigDict['xtol'] = 'xtol'
+    _fitConfigDict['max iterations'] = 'itMax'
+    _fitConfigDict['fit mode'] = 'gObjType'
+    _fitConfigDict['n closest points'] = 'nClosestPoints'
+    _fitConfigDict['kdtree args'] = 'treeArgs'
+    _fitConfigDict['verbose'] = 'fitVerbose'
+    _fitConfigDict['fixed nodes'] = 'fixedNodes'
+
     def __init__(self, location):
         super(FieldworkMeshFittingStep, self).__init__('Fieldwork Mesh Fitting', location)
         self._configured = False # A step cannot be executed until it has been configured.
@@ -64,20 +80,20 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
 
         self._config = {}
         self._config['identifier'] = ''
-        self._config['GD'] = '5.0'
-        self._config['sobelovD'] = '[8,8]'
-        self._config['sobelovW'] = '[1e-6, 1e-6, 1e-6, 1e-6, 2e-6]'
-        self._config['normalD'] = '8'
-        self._config['normalW'] = '50.0'
-        self._config['itMaxPerIt'] = '3'
+        self._config['mesh discretisation'] = '5.0'
+        self._config['sobelov discretisation'] = '[8,8]'
+        self._config['sobelov weight'] = '[1e-6, 1e-6, 1e-6, 1e-6, 2e-6]'
+        self._config['normal discretisation'] = '8'
+        self._config['normal weight'] = '50.0'
+        self._config['max sub-iterations'] = '3'
         self._config['xtol'] = '1e-6'
-        self._config['itMax'] = '5'
-        self._config['mode'] = 'DPEP'
-        self._config['nClosestPoints'] = '1'
-        self._config['treeArgs'] = '{}'
-        self._config['fitVerbose'] = 'True'
-        self._config['fixedNodes'] = 'None'
-        self._config['UI'] = 'True'
+        self._config['max iterations'] = '5'
+        self._config['fit mode'] = 'DPEP'
+        self._config['n closest points'] = '1'
+        self._config['kdtree args'] = '{}'
+        self._config['verbose'] = 'True'
+        self._config['fixed nodes'] = 'None'
+        self._config['GUI'] = 'True'
 
         self.data = None
         self.dataWeights = None
@@ -97,7 +113,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         may be connected up to a button in a widget for example.
         '''
         # Put your execute step code here before calling the '_doneExecution' method.
-        if self._config['UI Mode']=='True':
+        if self._config['GUI']=='True':
             self._widget = MayaviGFFittingViewerWidget(self.data, self.GFUnfitted, self._config, self._fit)
             # self._widget._ui.registerButton.clicked.connect(self._register)
             self._widget._ui.acceptButton.clicked.connect(self._doneExecution)
@@ -106,10 +122,37 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
             self._widget.setModal(True)
             self._setCurrentWidget(self._widget)
 
-        elif self._config['UI Mode']=='False':
+        elif self._config['GUI']=='False':
             self._fit()
             self.GFFitted = copy.deepcopy(self.GF)
             self._doneExecution()
+
+    def _mapFitConfigs(self):
+
+        fitkwargs = {}
+        fitkwargs['GF'] = self.GF
+        fitkwargs['data'] = self.data
+        fitkwargs['dataWeights'] = self.dataWeights
+        for k, v in self._fitConfigDict.items():
+            fitkwargs[v] = self._config[k]
+
+        return fitkwargs
+
+    def _fit(self):
+
+        # parse configurations
+        fitkwargs = self._mapFitConfigs()
+
+        # call fitting functions
+        GFFitted, paramsFitted,\
+        RMSEFitted, errorsFitted = fitting_tools.fitSurfacePerItSearch(**fitkwargs)
+
+        self.GFFitted = copy.deepcopy(GFFitted)
+        self.GFParamsFitted = paramsFitted
+        self.RMSEFitted = RMSEFitted
+        self.fitErrors = errorsFitted
+
+        return self.GFFitted, self.GFParamsFitted, self.RMSEFitted, self.fitErrors
 
     def setPortData(self, index, dataIn):
         '''
@@ -197,7 +240,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         conf.setValue('treeArgs', self._config['treeArgs'])
         conf.setValue('fitVerbose', self._config['fitVerbose'])
         conf.setValue('fixedNodes', self._config['fixedNodes'])
-        conf.setValue('UI', self._config['UI'])
+        conf.setValue('GUI', self._config['GUI'])
         conf.endGroup()
 
 
@@ -225,17 +268,11 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         self._config['treeArgs'] = conf.value('treeArgs', '{}')
         self._config['fitVerbose'] = conf.value('fitVerbose', 'True')
         self._config['fixedNodes'] = conf.value('fixedNodes', 'None')
-        self._config['UI'] = conf.value('UI', 'True')
+        self._config['GUI'] = conf.value('GUI', 'True')
         conf.endGroup()
 
         d = ConfigureDialog()
         d.identifierOccursCount = self._identifierOccursCount
         d.setConfig(self._config)
         self._configured = d.validate()
-
-    def _fit(self):
-
-        # parse configurations
-
-        # call fitting functions
 

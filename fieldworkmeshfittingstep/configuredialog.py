@@ -1,7 +1,7 @@
 
 
 from PySide import QtGui
-from fieldworkmeshfittingstep.ui_configuredialog import Ui_ConfigureDialog
+from fieldworkmeshfittingstep.ui_configuredialog import Ui_Dialog
 
 INVALID_STYLE_SHEET = 'background-color: rgba(239, 0, 0, 50)'
 DEFAULT_STYLE_SHEET = ''
@@ -17,7 +17,7 @@ class ConfigureDialog(QtGui.QDialog):
         '''
         QtGui.QDialog.__init__(self, parent)
         
-        self._ui = Ui_ConfigureDialog()
+        self._ui = Ui_Dialog()
         self._ui.setupUi(self)
 
         # Keep track of the previous identifier so that we can track changes
@@ -73,19 +73,20 @@ class ConfigureDialog(QtGui.QDialog):
         self._previousIdentifier = self._ui.lineEdit0.text()
         config = {}
         config['identifier'] = self._ui.lineEdit0.text()
-        config['GD'] = self._ui.lineEdit1.text()
-        config['sobelovD'] = self._ui.lineEdit2.text()
-        config['sobelovW'] = self._ui.lineEdit3.text()
-        config['normalD'] = self._ui.lineEdit4.text()
-        config['normalW'] = self._ui.lineEdit5.text()
-        config['itMaxPerIt'] = self._ui.lineEdit6.text()
+        config['mesh discretisation'] = self._ui.lineEdit1.text()
+        config['sobelov discretisation'] = self._ui.lineEdit2.text()
+        config['sobelov weight'] = self._ui.lineEdit3.text()
+        config['normal discretisation'] = self._ui.lineEdit4.text()
+        config['normal weight'] = self._ui.lineEdit5.text()
+        config['max sub-iterations'] = self._ui.lineEdit6.text()
         config['xtol'] = self._ui.lineEdit7.text()
-        config['itMax'] = self._ui.lineEdit8.text()
-        config['mode'] = self._ui.lineEdit9.text()
-        config['nClosestPoints'] = self._ui.lineEdit10.text()
-        config['treeArgs'] = self._ui.lineEdit11.text()
-        config['fitVerbose'] = self._ui.lineEdit12.text()
-        config['fixedNodes'] = self._ui.lineEdit13.text()
+        config['max iterations'] = self._ui.lineEdit8.text()
+        config['fit mode'] = self._ui.lineEdit9.text()
+        config['n closest points'] = self._ui.lineEdit10.text()
+        config['kdtree args'] = self._ui.lineEdit11.text()
+        config['verbose'] = self._ui.lineEdit12.text()
+        config['fixed nodes'] = self._ui.lineEdit13.text()
+        config['GUI'] = self._ui.lineEdit14.text()
         return config
 
     def setConfig(self, config):
@@ -96,17 +97,18 @@ class ConfigureDialog(QtGui.QDialog):
         '''
         self._previousIdentifier = config['identifier']
         self._ui.lineEdit0.setText(config['identifier'])
-        self._ui.lineEdit1.setText(config['GD'])
-        self._ui.lineEdit2.setText(config['sobelovD'])
-        self._ui.lineEdit3.setText(config['sobelovW'])
-        self._ui.lineEdit4.setText(config['normalD'])
-        self._ui.lineEdit5.setText(config['normalW'])
-        self._ui.lineEdit6.setText(config['itMaxPerIt'])
+        self._ui.lineEdit1.setText(config['mesh discretisation'])
+        self._ui.lineEdit2.setText(config['sobelov discretisation'])
+        self._ui.lineEdit3.setText(config['sobelov weight'])
+        self._ui.lineEdit4.setText(config['normal discretisation'])
+        self._ui.lineEdit5.setText(config['normal weight'])
+        self._ui.lineEdit6.setText(config['max sub-iterations'])
         self._ui.lineEdit7.setText(config['xtol'])
-        self._ui.lineEdit8.setText(config['itMax'])
-        self._ui.lineEdit9.setText(config['mode'])
-        self._ui.lineEdit10.setText(config['nClosestPoints'])
-        self._ui.lineEdit11.setText(config['treeArgs'])
-        self._ui.lineEdit12.setText(config['fitVerbose'])
-        self._ui.lineEdit13.setText(config['fixedNodes'])
+        self._ui.lineEdit8.setText(config['max iterations'])
+        self._ui.lineEdit9.setText(config['fit mode'])
+        self._ui.lineEdit10.setText(config['n closest points'])
+        self._ui.lineEdit11.setText(config['kdtree args'])
+        self._ui.lineEdit12.setText(config['verbose'])
+        self._ui.lineEdit13.setText(config['fixed nodes'])
+        self._ui.lineEdit13.setText(config['GUI'])
 
