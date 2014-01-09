@@ -1,6 +1,7 @@
 
 
 from PySide import QtGui
+from PySide.QtGui import QDialog, QFileDialog, QDialogButtonBox
 from fieldworkmeshfittingstep.ui_configuredialog import Ui_Dialog
 
 INVALID_STYLE_SHEET = 'background-color: rgba(239, 0, 0, 50)'
@@ -62,6 +63,7 @@ class ConfigureDialog(QtGui.QDialog):
         else:
             self._ui.lineEdit0.setStyleSheet(INVALID_STYLE_SHEET)
 
+        self._ui.buttonBox.button(QDialogButtonBox.Ok).setEnabled(valid)
         return valid
 
     def getConfig(self):
@@ -110,5 +112,5 @@ class ConfigureDialog(QtGui.QDialog):
         self._ui.lineEdit11.setText(config['kdtree args'])
         self._ui.lineEdit12.setText(config['verbose'])
         self._ui.lineEdit13.setText(config['fixed nodes'])
-        self._ui.lineEdit13.setText(config['GUI'])
+        self._ui.lineEdit14.setText(config['GUI'])
 

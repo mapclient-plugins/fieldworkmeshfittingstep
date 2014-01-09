@@ -9,6 +9,7 @@ from PySide import QtCore
 
 from mountpoints.workflowstep import WorkflowStepMountPoint
 from fieldworkmeshfittingstep.configuredialog import ConfigureDialog
+from fieldworkmeshfittingstep.mayavifittingviewerwidget import MayaviFittingViewerWidget
 
 import copy
 from fieldwork.field.tools import fitting_tools
@@ -36,6 +37,23 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
     _fitConfigDict['kdtree args'] = 'treeArgs'
     _fitConfigDict['verbose'] = 'fitVerbose'
     _fitConfigDict['fixed nodes'] = 'fixedNodes'
+
+    _configDefaults = {}
+    _configDefaults['identifier'] = ''
+    _configDefaults['mesh discretisation'] = '5.0'
+    _configDefaults['sobelov discretisation'] = '[8,8]'
+    _configDefaults['sobelov weight'] = '[1e-6, 1e-6, 1e-6, 1e-6, 2e-6]'
+    _configDefaults['normal discretisation'] = '8'
+    _configDefaults['normal weight'] = '50.0'
+    _configDefaults['max sub-iterations'] = '3'
+    _configDefaults['xtol'] = '1e-6'
+    _configDefaults['max iterations'] = '5'
+    _configDefaults['fit mode'] = 'DPEP'
+    _configDefaults['n closest points'] = '1'
+    _configDefaults['kdtree args'] = '{}'
+    _configDefaults['verbose'] = 'True'
+    _configDefaults['fixed nodes'] = 'None'
+    _configDefaults['GUI'] = 'True'
 
     def __init__(self, location):
         super(FieldworkMeshFittingStep, self).__init__('Fieldwork Mesh Fitting', location)
@@ -79,21 +97,8 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
                       'numpyarray1d'))
 
         self._config = {}
-        self._config['identifier'] = ''
-        self._config['mesh discretisation'] = '5.0'
-        self._config['sobelov discretisation'] = '[8,8]'
-        self._config['sobelov weight'] = '[1e-6, 1e-6, 1e-6, 1e-6, 2e-6]'
-        self._config['normal discretisation'] = '8'
-        self._config['normal weight'] = '50.0'
-        self._config['max sub-iterations'] = '3'
-        self._config['xtol'] = '1e-6'
-        self._config['max iterations'] = '5'
-        self._config['fit mode'] = 'DPEP'
-        self._config['n closest points'] = '1'
-        self._config['kdtree args'] = '{}'
-        self._config['verbose'] = 'True'
-        self._config['fixed nodes'] = 'None'
-        self._config['GUI'] = 'True'
+        for k, v in self._configDefaults.items():
+            self._config[k] = v
 
         self.data = None
         self.dataWeights = None
@@ -114,7 +119,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         '''
         # Put your execute step code here before calling the '_doneExecution' method.
         if self._config['GUI']=='True':
-            self._widget = MayaviGFFittingViewerWidget(self.data, self.GFUnfitted, self._config, self._fit)
+            self._widget = MayaviFittingViewerWidget(self.data, self.GFUnfitted, self._config, self._fit)
             # self._widget._ui.registerButton.clicked.connect(self._register)
             self._widget._ui.acceptButton.clicked.connect(self._doneExecution)
             self._widget._ui.abortButton.clicked.connect(self._abort)
@@ -226,23 +231,24 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
         conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
         conf.beginGroup('config')
-        conf.setValue('identifier', self._config['identifier'])
-        conf.setValue('GD', self._config['GD'])
-        conf.setValue('sobelovD', self._config['sobelovD'])
-        conf.setValue('sobelovW', self._config['sobelovW'])
-        conf.setValue('normalD', self._config['normalD'])
-        conf.setValue('normalW', self._config['normalW'])
-        conf.setValue('itMaxPerIt', self._config['itMaxPerIt'])
-        conf.setValue('xtol', self._config['xtol'])
-        conf.setValue('itMax', self._config['itMax'])
-        conf.setValue('mode', self._config['mode'])
-        conf.setValue('nClosestPoints', self._config['nClosestPoints'])
-        conf.setValue('treeArgs', self._config['treeArgs'])
-        conf.setValue('fitVerbose', self._config['fitVerbose'])
-        conf.setValue('fixedNodes', self._config['fixedNodes'])
-        conf.setValue('GUI', self._config['GUI'])
+        for k in self._config.keys():
+            conf.setValue(k, self._config[k])
+        # conf.setValue('identifier', self._config['identifier'])
+        # conf.setValue('GD', self._config['GD'])
+        # conf.setValue('sobelovD', self._config['sobelovD'])
+        # conf.setValue('sobelovW', self._config['sobelovW'])
+        # conf.setValue('normalD', self._config['normalD'])
+        # conf.setValue('normalW', self._config['normalW'])
+        # conf.setValue('itMaxPerIt', self._config['itMaxPerIt'])
+        # conf.setValue('xtol', self._config['xtol'])
+        # conf.setValue('itMax', self._config['itMax'])
+        # conf.setValue('mode', self._config['mode'])
+        # conf.setValue('nClosestPoints', self._config['nClosestPoints'])
+        # conf.setValue('treeArgs', self._config['treeArgs'])
+        # conf.setValue('fitVerbose', self._config['fitVerbose'])
+        # conf.setValue('fixedNodes', self._config['fixedNodes'])
+        # conf.setValue('GUI', self._config['GUI'])
         conf.endGroup()
-
 
     def deserialize(self, location):
         '''
@@ -254,21 +260,24 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
         conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
         conf.beginGroup('config')
-        self._config['identifier'] = conf.value('identifier', '')
-        self._config['GD'] = conf.value('GD', '5.0')
-        self._config['sobelovD'] = conf.value('sobelovD', '[8,8]')
-        self._config['sobelovW'] = conf.value('sobelovW', '[1e-6, 1e-6, 1e-6, 1e-6, 2e-6]')
-        self._config['normalD'] = conf.value('normalD', '8')
-        self._config['normalW'] = conf.value('normalW', '50.0')
-        self._config['itMaxPerIt'] = conf.value('itMaxPerIt', '3')
-        self._config['xtol'] = conf.value('xtol', '1e-6')
-        self._config['itMax'] = conf.value('itMax', '5')
-        self._config['mode'] = conf.value('mode', 'DPEP')
-        self._config['nClosestPoints'] = conf.value('nClosestPoints', '1')
-        self._config['treeArgs'] = conf.value('treeArgs', '{}')
-        self._config['fitVerbose'] = conf.value('fitVerbose', 'True')
-        self._config['fixedNodes'] = conf.value('fixedNodes', 'None')
-        self._config['GUI'] = conf.value('GUI', 'True')
+
+        for k, v in self._configDefaults.items():
+            self._config[k] = conf.value(k, v)
+        # self._config['identifier'] = conf.value('identifier', '')
+        # self._config['GD'] = conf.value('GD', '5.0')
+        # self._config['sobelovD'] = conf.value('sobelovD', '[8,8]')
+        # self._config['sobelovW'] = conf.value('sobelovW', '[1e-6, 1e-6, 1e-6, 1e-6, 2e-6]')
+        # self._config['normalD'] = conf.value('normalD', '8')
+        # self._config['normalW'] = conf.value('normalW', '50.0')
+        # self._config['itMaxPerIt'] = conf.value('itMaxPerIt', '3')
+        # self._config['xtol'] = conf.value('xtol', '1e-6')
+        # self._config['itMax'] = conf.value('itMax', '5')
+        # self._config['mode'] = conf.value('mode', 'DPEP')
+        # self._config['nClosestPoints'] = conf.value('nClosestPoints', '1')
+        # self._config['treeArgs'] = conf.value('treeArgs', '{}')
+        # self._config['fitVerbose'] = conf.value('fitVerbose', 'True')
+        # self._config['fixedNodes'] = conf.value('fixedNodes', 'None')
+        # self._config['GUI'] = conf.value('GUI', 'True')
         conf.endGroup()
 
         d = ConfigureDialog()

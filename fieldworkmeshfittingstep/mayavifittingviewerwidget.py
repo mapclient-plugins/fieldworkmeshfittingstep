@@ -23,7 +23,7 @@ os.environ['ETS_TOOLKIT'] = 'qt4'
 from PySide.QtGui import QDialog, QFileDialog, QDialogButtonBox, QAbstractItemView, QTableWidgetItem
 from PySide.QtCore import Qt
 
-from pointwiserigidregistrationstep.ui_mayaviregistrationviewerwidget import Ui_Dialog
+from fieldworkmeshfittingstep.ui_mayavifittingviewerwidget import Ui_Dialog
 from traits.api import HasTraits, Instance, on_trait_change, \
     Int, Dict
 
@@ -39,11 +39,12 @@ class MayaviFittingViewerWidget(QDialog):
     defaultColor = colours['bone']
     objectTableHeaderColumns = {'visible':0, 'type':1}
     backgroundColour = (0.0,0.0,0.0)
-    _dataArgs = {'mode':'point', 'scale_factor':0.1, 'color':(0,1,0)}
+    _dataRenderArgs = {'mode':'point', 'scale_factor':0.1, 'color':(0,1,0)}
     _GFUnfittedRenderArgs = {'color':(1,0,0)}
     _GFFittedRenderArgs = {'color':(1,1,0)}
+    _GFD = [8,8]
 
-    _fitParamTableRows = ('mesh discretisation','sobelov discretisation','sobelov weight'\
+    _fitParamTableRows = ('mesh discretisation','sobelov discretisation','sobelov weight',\
                           'normal discretisation','normal weight','max iterations',\
                           'max sub-iterations','xtol','kdtree args','n closest points',\
                           'verbose','fixed nodes','GUI')
@@ -69,8 +70,8 @@ class MayaviFittingViewerWidget(QDialog):
         # create self._objects
         self._objects = MayaviViewerObjectsContainer()
         self._objects.addObject('data', MayaviViewerDataPoints('data', self._data, renderArgs=self._dataRenderArgs))
-        self._objects.addObject('GF Unfitted', MayaviViewerFieldworkModel('GF Unfitted', self._GFUnfitted, renderArgs=self._GFUnfittedRenderArgs))
-        self._objects.addObject('GF Fitted', MayaviViewerDataPoints('GF Fitted', self._GFFitted, renderArgs=self._GFFittedRenderArgs))
+        self._objects.addObject('GF Unfitted', MayaviViewerFieldworkModel('GF Unfitted', self._GFUnfitted, self._GFD, renderArgs=self._GFUnfittedRenderArgs))
+        self._objects.addObject('GF Fitted', MayaviViewerDataPoints('GF Fitted', self._GFFitted, self._GFD, renderArgs=self._GFFittedRenderArgs))
 
         self._makeConnections()
         self._initialiseObjectTable()
@@ -94,7 +95,7 @@ class MayaviFittingViewerWidget(QDialog):
 
     def _initialiseSettings(self):
         # set values for the params table
-        for i, param in enumerate(self._fitParamTableRows):
+        for row, param in enumerate(self._fitParamTableRows):
             self._ui.fitParamsTableWidget.setItem(row, 0, QTableWidgetItem(self._config[param]))
 
     def _fitParamsTableChanged(self, item):
