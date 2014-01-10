@@ -42,14 +42,14 @@ class MayaviFittingViewerWidget(QDialog):
     _dataRenderArgs = {'mode':'point', 'scale_factor':0.1, 'color':(0,1,0)}
     _GFUnfittedRenderArgs = {'color':(1,0,0)}
     _GFFittedRenderArgs = {'color':(1,1,0)}
-    _GFD = [8,8]
+    _GFD = [15,15]
 
     _fitParamTableRows = ('mesh discretisation','sobelov discretisation','sobelov weight',\
                           'normal discretisation','normal weight','max iterations',\
                           'max sub-iterations','xtol','kdtree args','n closest points',\
                           'verbose','fixed nodes','GUI')
 
-    def __init__(self, data, GFUnfitted, config, fitFunc, parent=None):
+    def __init__(self, data, GFUnfitted, config, fitFunc, resetCallback, parent=None):
         '''
         Constructor
         '''
@@ -66,12 +66,13 @@ class MayaviFittingViewerWidget(QDialog):
         self._GFFitted = copy.deepcopy(self._GFUnfitted)
         self._fitFunc = fitFunc
         self._config = config
+        self._resetCallback = resetCallback
 
         # create self._objects
         self._objects = MayaviViewerObjectsContainer()
         self._objects.addObject('data', MayaviViewerDataPoints('data', self._data, renderArgs=self._dataRenderArgs))
         self._objects.addObject('GF Unfitted', MayaviViewerFieldworkModel('GF Unfitted', self._GFUnfitted, self._GFD, renderArgs=self._GFUnfittedRenderArgs))
-        self._objects.addObject('GF Fitted', MayaviViewerDataPoints('GF Fitted', self._GFFitted, self._GFD, renderArgs=self._GFFittedRenderArgs))
+        self._objects.addObject('GF Fitted', MayaviViewerFieldworkModel('GF Fitted', self._GFFitted, self._GFD, renderArgs=self._GFFittedRenderArgs))
 
         self._makeConnections()
         self._initialiseObjectTable()
@@ -169,13 +170,13 @@ class MayaviFittingViewerWidget(QDialog):
             self._objects.getObject(name).draw(self._scene)
 
     def _fit(self):
-        GFFitted, GFParamsFitted, RMSEFitted, errorsFitted = self._registerFunc()
+        GFFitted, GFParamsFitted, RMSEFitted, errorsFitted = self._fitFunc()
         self._GFFitted = copy.deepcopy(GFFitted)
 
         # update error fields
         self._ui.RMSELineEdit.setText(str(RMSEFitted))
         self._ui.meanErrorLineEdit.setText(str(errorsFitted.mean()))
-        self._ui.RMSELineEdit.setText(str(errorsFitted.std()))
+        self._ui.SDLineEdit.setText(str(errorsFitted.std()))
 
         # update fitted GF - TODO
         fittedObj = self._objects.getObject('GF Fitted')
@@ -184,6 +185,7 @@ class MayaviFittingViewerWidget(QDialog):
         fittedTableItem.setCheckState(Qt.Checked)
 
     def _reset(self):
+        self._resetCallback()
         fittedObj = self._objects.getObject('GF Fitted')
         fittedObj.updateGeometry(self._GFUnfitted.field_parameters.copy(), self._scene)
         fittedTableItem = self._ui.tableWidget.item(2, self.objectTableHeaderColumns['visible'])
@@ -198,6 +200,7 @@ class MayaviFittingViewerWidget(QDialog):
         self._close()
 
     def _abort(self):
+        self._reset()
         self._close()
 
     def _close(self):

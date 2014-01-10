@@ -119,7 +119,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         '''
         # Put your execute step code here before calling the '_doneExecution' method.
         if self._config['GUI']=='True':
-            self._widget = MayaviFittingViewerWidget(self.data, self.GFUnfitted, self._config, self._fit)
+            self._widget = MayaviFittingViewerWidget(self.data, self.GFUnfitted, self._config, self._fit, self._reset)
             # self._widget._ui.registerButton.clicked.connect(self._register)
             self._widget._ui.acceptButton.clicked.connect(self._doneExecution)
             self._widget._ui.abortButton.clicked.connect(self._abort)
@@ -138,8 +138,12 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         fitkwargs['GF'] = self.GF
         fitkwargs['data'] = self.data
         fitkwargs['dataWeights'] = self.dataWeights
+        fitkwargs['fullErrors'] = True
         for k, v in self._fitConfigDict.items():
-            fitkwargs[v] = self._config[k]
+            if k=='fit mode':
+                fitkwargs[v] = self._config[k]
+            else:
+                fitkwargs[v] = eval(self._config[k])
 
         return fitkwargs
 
@@ -149,8 +153,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         fitkwargs = self._mapFitConfigs()
 
         # call fitting functions
-        GFFitted, paramsFitted,\
-        RMSEFitted, errorsFitted = fitting_tools.fitSurfacePerItSearch(**fitkwargs)
+        (GFFitted, paramsFitted, RMSEFitted, errorsFitted) = fitting_tools.fitSurfacePerItSearch(**fitkwargs)
 
         self.GFFitted = copy.deepcopy(GFFitted)
         self.GFParamsFitted = paramsFitted
@@ -158,6 +161,17 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         self.fitErrors = errorsFitted
 
         return self.GFFitted, self.GFParamsFitted, self.RMSEFitted, self.fitErrors
+
+    def _abort(self):
+        self._doneExecution()
+        raise RuntimeError, 'registration aborted'
+
+    def _reset(self):
+        self.GFFitted = None
+        self.GFParamsFitted = None
+        self.RMSEFitted = None
+        self.FitErrors = None
+        self.GF = copy.deepcopy(self.GFUnfitted)
 
     def setPortData(self, index, dataIn):
         '''
