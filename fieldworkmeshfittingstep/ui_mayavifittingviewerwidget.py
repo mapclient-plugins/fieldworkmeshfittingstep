@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'mayavifittingviewerwidget.ui'
 #
-# Created: Wed Jan  8 15:16:10 2014
-#      by: pyside-uic 0.2.13 running on PySide 1.1.0
+# Created: Mon Jan 13 22:40:45 2014
+#      by: pyside-uic 0.2.14 running on PySide 1.1.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(914, 625)
+        Dialog.resize(914, 640)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -73,7 +73,7 @@ class Ui_Dialog(object):
         self.fitParamsTableWidget = QtGui.QTableWidget(self.groupBox)
         self.fitParamsTableWidget.setObjectName("fitParamsTableWidget")
         self.fitParamsTableWidget.setColumnCount(1)
-        self.fitParamsTableWidget.setRowCount(12)
+        self.fitParamsTableWidget.setRowCount(13)
         item = QtGui.QTableWidgetItem()
         self.fitParamsTableWidget.setVerticalHeaderItem(0, item)
         item = QtGui.QTableWidgetItem()
@@ -99,10 +99,12 @@ class Ui_Dialog(object):
         item = QtGui.QTableWidgetItem()
         self.fitParamsTableWidget.setVerticalHeaderItem(11, item)
         item = QtGui.QTableWidgetItem()
+        self.fitParamsTableWidget.setVerticalHeaderItem(12, item)
+        item = QtGui.QTableWidgetItem()
         self.fitParamsTableWidget.setHorizontalHeaderItem(0, item)
         item = QtGui.QTableWidgetItem()
         item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
-        self.fitParamsTableWidget.setItem(0, 0, item)
+        self.fitParamsTableWidget.setItem(1, 0, item)
         self.verticalLayout_2.addWidget(self.fitParamsTableWidget)
         self.verticalLayout.addWidget(self.groupBox)
         self.fitButtonsGroup = QtGui.QGridLayout()
@@ -231,23 +233,24 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Model Viewer", None, QtGui.QApplication.UnicodeUTF8))
+        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Mesh Fitting", None, QtGui.QApplication.UnicodeUTF8))
         self.tableWidget.setSortingEnabled(False)
         self.tableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("Dialog", "Visible", None, QtGui.QApplication.UnicodeUTF8))
         self.tableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("Dialog", "Type", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("Dialog", "Fitting Parameters", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(0).setText(QtGui.QApplication.translate("Dialog", "mesh discretisation", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(1).setText(QtGui.QApplication.translate("Dialog", "sobelov discretisation", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(2).setText(QtGui.QApplication.translate("Dialog", "sobelov weight", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(3).setText(QtGui.QApplication.translate("Dialog", "normal discretisation", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(4).setText(QtGui.QApplication.translate("Dialog", "normal weight", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(5).setText(QtGui.QApplication.translate("Dialog", "max iterations", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(6).setText(QtGui.QApplication.translate("Dialog", "max sub-iterations", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(7).setText(QtGui.QApplication.translate("Dialog", "xtol", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(8).setText(QtGui.QApplication.translate("Dialog", "kdtree args", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(9).setText(QtGui.QApplication.translate("Dialog", "n closest points", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(10).setText(QtGui.QApplication.translate("Dialog", "verbose", None, QtGui.QApplication.UnicodeUTF8))
-        self.fitParamsTableWidget.verticalHeaderItem(11).setText(QtGui.QApplication.translate("Dialog", "fixed nodes", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(0).setText(QtGui.QApplication.translate("Dialog", "fit mode", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(1).setText(QtGui.QApplication.translate("Dialog", "mesh discretisation", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(2).setText(QtGui.QApplication.translate("Dialog", "sobelov discretisation", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(3).setText(QtGui.QApplication.translate("Dialog", "sobelov weight", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(4).setText(QtGui.QApplication.translate("Dialog", "normal discretisation", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(5).setText(QtGui.QApplication.translate("Dialog", "normal weight", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(6).setText(QtGui.QApplication.translate("Dialog", "max iterations", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(7).setText(QtGui.QApplication.translate("Dialog", "max sub-iterations", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(8).setText(QtGui.QApplication.translate("Dialog", "xtol", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(9).setText(QtGui.QApplication.translate("Dialog", "kdtree args", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(10).setText(QtGui.QApplication.translate("Dialog", "n closest points", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(11).setText(QtGui.QApplication.translate("Dialog", "verbose", None, QtGui.QApplication.UnicodeUTF8))
+        self.fitParamsTableWidget.verticalHeaderItem(12).setText(QtGui.QApplication.translate("Dialog", "fixed nodes", None, QtGui.QApplication.UnicodeUTF8))
         self.fitParamsTableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("Dialog", "Value", None, QtGui.QApplication.UnicodeUTF8))
         __sortingEnabled = self.fitParamsTableWidget.isSortingEnabled()
         self.fitParamsTableWidget.setSortingEnabled(False)
@@ -269,4 +272,4 @@ class Ui_Dialog(object):
         self.screenshotFilenameLineEdit.setText(QtGui.QApplication.translate("Dialog", "screenshot.png", None, QtGui.QApplication.UnicodeUTF8))
         self.screenshotSaveButton.setText(QtGui.QApplication.translate("Dialog", "Save Screenshot", None, QtGui.QApplication.UnicodeUTF8))
 
-from mayaviscenewidget import MayaviSceneWidget
+from mappluginutils.mayaviviewer import MayaviSceneWidget

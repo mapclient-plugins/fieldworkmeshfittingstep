@@ -44,10 +44,10 @@ class MayaviFittingViewerWidget(QDialog):
     _GFFittedRenderArgs = {'color':(1,1,0)}
     _GFD = [15,15]
 
-    _fitParamTableRows = ('mesh discretisation','sobelov discretisation','sobelov weight',\
-                          'normal discretisation','normal weight','max iterations',\
-                          'max sub-iterations','xtol','kdtree args','n closest points',\
-                          'verbose','fixed nodes','GUI')
+    _fitParamTableRows = ('fit mode','mesh discretisation','sobelov discretisation',\
+                          'sobelov weight','normal discretisation','normal weight',\
+                          'max iterations','max sub-iterations','xtol','kdtree args',\
+                          'n closest points','verbose','fixed nodes','GUI')
 
     def __init__(self, data, GFUnfitted, config, fitFunc, resetCallback, parent=None):
         '''

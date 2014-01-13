@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>914</width>
-    <height>625</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Model Viewer</string>
+   <string>Mesh Fitting</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
@@ -118,6 +118,11 @@
                <widget class="QTableWidget" name="fitParamsTableWidget">
                 <row>
                  <property name="text">
+                  <string>fit mode</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
                   <string>mesh discretisation</string>
                  </property>
                 </row>
@@ -181,7 +186,7 @@
                   <string>Value</string>
                  </property>
                 </column>
-                <item row="0" column="0">
+                <item row="1" column="0">
                  <property name="text">
                   <string/>
                  </property>
