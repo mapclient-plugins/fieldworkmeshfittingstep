@@ -164,7 +164,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         return self.GFFitted, self.GFParamsFitted, self.RMSEFitted, self.fitErrors
 
     def _abort(self):
-        self._doneExecution()
+        # self._doneExecution()
         raise RuntimeError, 'mesh fitting aborted'
 
     def _reset(self):
