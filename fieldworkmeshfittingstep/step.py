@@ -105,7 +105,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         self.GFUnfitted = None
         self.GF = None
         self.GFFitted = None
-        self.fitRMSE = None
+        self.RMSEFitted = None
         self.GFParamsFitted = None
         self.fitErrors = None
 
@@ -199,7 +199,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         elif index == 4:
             return self.GFParamsFitted # ju#fieldworkmodelparameters
         elif index == 5:
-            return self.fitRMSE # float
+            return self.RMSEFitted # float
         else:
             return self.fitErrors # numpyarray1d
 
