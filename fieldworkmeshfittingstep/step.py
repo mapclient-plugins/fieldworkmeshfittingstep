@@ -159,7 +159,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         self.GFFitted = copy.deepcopy(GFFitted)
         self.GFParamsFitted = paramsFitted
         self.RMSEFitted = RMSEFitted
-        self.fitErrors = errorsFitted
+        self.fitErrors = np.sqrt(errorsFitted)
 
         return self.GFFitted, self.GFParamsFitted, self.RMSEFitted, self.fitErrors
 
