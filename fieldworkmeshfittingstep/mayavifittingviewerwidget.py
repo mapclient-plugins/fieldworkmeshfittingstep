@@ -189,21 +189,6 @@ class MayaviFittingViewerWidget(QDialog):
     def drawObjects(self):
         for name in self._objects.getObjectNames():
             self._objects.getObject(name).draw(self._scene)
-
-    def _fit(self):
-        GFFitted, GFParamsFitted, RMSEFitted, errorsFitted = self._fitFunc(self._fitCallback)
-        self._GFFitted = copy.deepcopy(GFFitted)
-
-        # update error fields
-        self._ui.RMSELineEdit.setText(str(RMSEFitted))
-        self._ui.meanErrorLineEdit.setText(str(errorsFitted.mean()))
-        self._ui.SDLineEdit.setText(str(errorsFitted.std()))
-
-        # update fitted GF
-        fittedObj = self._objects.getObject('GF Fitted')
-        fittedObj.updateGeometry(GFParamsFitted, self._scene)
-        fittedTableItem = self._ui.tableWidget.item(2, self.objectTableHeaderColumns['visible'])
-        fittedTableItem.setCheckState(Qt.Checked)
     
     def _fitUpdate(self, fitOutput):
         GFFitted, GFParamsFitted, RMSEFitted, errorsFitted = fitOutput
@@ -254,7 +239,7 @@ class MayaviFittingViewerWidget(QDialog):
         # clear error fields
         self._ui.RMSELineEdit.clear()
         self._ui.meanErrorLineEdit.clear()
-        self._ui.RMSELineEdit.clear()
+        self._ui.SDLineEdit.clear()
 
     def _accept(self):
         self._close()
