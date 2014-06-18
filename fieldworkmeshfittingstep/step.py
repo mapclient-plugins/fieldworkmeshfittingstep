@@ -147,10 +147,17 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
 
         return fitkwargs
 
-    def _fit(self, callback=None):
+    def _fit(self, callbackSignal=None):
 
         # parse configurations
         fitkwargs = self._mapFitConfigs()
+
+        if callbackSignal is not None:
+            def callback(output):
+                callbackSignal.emit(output)
+        else:
+            callback = None
+
         fitkwargs['fitOutputCallback'] = callback
 
         # call fitting functions
