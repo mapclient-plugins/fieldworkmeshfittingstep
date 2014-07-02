@@ -7,9 +7,9 @@ import os
 from PySide import QtGui
 from PySide import QtCore
 
-from mountpoints.workflowstep import WorkflowStepMountPoint
-from fieldworkmeshfittingstep.configuredialog import ConfigureDialog
-from fieldworkmeshfittingstep.mayavifittingviewerwidget import MayaviFittingViewerWidget
+from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
+from mapclientplugins.fieldworkmeshfittingstep.configuredialog import ConfigureDialog
+from mapclientplugins.fieldworkmeshfittingstep.mayavifittingviewerwidget import MayaviFittingViewerWidget
 
 import copy
 from fieldwork.field.tools import fitting_tools
@@ -188,12 +188,12 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         uses port for this step then the index can be ignored.
         '''
         if index == 0:
-            self.data = dataIn # ju#pointcoordinates
+            self.data = np.array(dataIn, dtype=float) # ju#pointcoordinates
         elif index == 1:
             self.GF = dataIn   # ju#fieldworkmodel
             self.GFUnfitted = copy.deepcopy(self.GF)
         else:
-            self.dataWeights = dataIn # numpyarray1d - dataWeights
+            self.dataWeights = np.array(dataIn, dtype=float) # numpyarray1d - dataWeights
 
     def getPortData(self, index):
         '''
