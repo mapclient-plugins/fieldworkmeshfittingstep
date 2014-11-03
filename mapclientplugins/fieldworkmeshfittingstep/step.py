@@ -18,8 +18,8 @@ import numpy as np
 
 class FieldworkMeshFittingStep(WorkflowStepMountPoint):
     '''
-    Skeleton step which is intended to be a helpful starting point
-    for new steps.
+    Step for fitting fieldwork models to data clouds by optimising nodal 
+    parameters subject to Sobelov and normal smoothing penalties.
     '''
 
     # maps config keys to fitting function argument names
