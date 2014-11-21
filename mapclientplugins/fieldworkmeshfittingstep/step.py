@@ -75,7 +75,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         # data weights (1d numpy array, optional)
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
-                      'numpyarray1d'))
+                      'numpy#array1d'))
 
         # fitted GF (geometric_field)
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
@@ -90,12 +90,12 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         # RMS error (float)
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
-                      'float'))
+                      'python#float'))
 
         # error for each data point (1d numpy array)
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
-                      'numpyarray1d'))
+                      'numpy#array1d'))
 
         self._config = {}
         for k, v in self._configDefaults.items():
