@@ -98,7 +98,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
                       'numpy#array1d'))
 
         self._config = {}
-        for k, v in self._configDefaults.items():
+        for k, v in list(self._configDefaults.items()):
             self._config[k] = v
 
         self.data = None
@@ -140,7 +140,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         fitkwargs['data'] = self.data
         fitkwargs['dataWeights'] = self.dataWeights
         fitkwargs['fullErrors'] = True
-        for k, v in self._fitConfigDict.items():
+        for k, v in list(self._fitConfigDict.items()):
             if k=='fit mode':
                 fitkwargs[v] = self._config[k]
             else:
@@ -173,7 +173,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
 
     def _abort(self):
         # self._doneExecution()
-        raise RuntimeError, 'mesh fitting aborted'
+        raise RuntimeError('mesh fitting aborted')
 
     def _reset(self):
         self.GFFitted = None
@@ -254,7 +254,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
         conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
         conf.beginGroup('config')
-        for k in self._config.keys():
+        for k in list(self._config.keys()):
             conf.setValue(k, self._config[k])
         # conf.setValue('identifier', self._config['identifier'])
         # conf.setValue('GD', self._config['GD'])
@@ -284,7 +284,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
         conf.beginGroup('config')
 
-        for k, v in self._configDefaults.items():
+        for k, v in list(self._configDefaults.items()):
             self._config[k] = conf.value(k, v)
         # self._config['identifier'] = conf.value('identifier', '')
         # self._config['GD'] = conf.value('GD', '5.0')
