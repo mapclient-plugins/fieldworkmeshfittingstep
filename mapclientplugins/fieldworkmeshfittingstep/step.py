@@ -143,6 +143,20 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         for k, v in list(self._fitConfigDict.items()):
             if k=='fit mode':
                 fitkwargs[v] = self._config[k]
+            elif k=='fixed nodes':
+                inputStr = self._config[k]
+                if inputStr=='None':
+                    fitkwargs[v]=None
+                else:
+                    fixedNodes = []
+                    words = inputStr.split(',')
+                    for w in words:
+                        if '-' in w:
+                            x0,x1 = w.split('-')
+                            fixedNodes += range(int(x0), int(x1)+1)
+                        else:
+                            fixedNodes.append(int(w))
+                    fitkwargs[v] = fixedNodes
             else:
                 fitkwargs[v] = eval(self._config[k])
 
