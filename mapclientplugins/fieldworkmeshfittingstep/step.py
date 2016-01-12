@@ -3,6 +3,7 @@
 MAP Client Plugin Step
 '''
 import os
+import json
 
 from PySide import QtGui
 from PySide import QtCore
@@ -243,65 +244,19 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         '''
         self._config['identifier'] = identifier
 
-    def serialize(self, location):
+    def serialize(self):
         '''
-        Add code to serialize this step to disk.  The filename should
-        use the step identifier (received from getIdentifier()) to keep it
-        unique within the workflow.  The suggested name for the file on
-        disk is:
-            filename = getIdentifier() + '.conf'
+        Add code to serialize this step to disk. Returns a json string for
+        mapclient to serialise.
         '''
-        configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
-        conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
-        conf.beginGroup('config')
-        for k in list(self._config.keys()):
-            conf.setValue(k, self._config[k])
-        # conf.setValue('identifier', self._config['identifier'])
-        # conf.setValue('GD', self._config['GD'])
-        # conf.setValue('sobelovD', self._config['sobelovD'])
-        # conf.setValue('sobelovW', self._config['sobelovW'])
-        # conf.setValue('normalD', self._config['normalD'])
-        # conf.setValue('normalW', self._config['normalW'])
-        # conf.setValue('itMaxPerIt', self._config['itMaxPerIt'])
-        # conf.setValue('xtol', self._config['xtol'])
-        # conf.setValue('itMax', self._config['itMax'])
-        # conf.setValue('mode', self._config['mode'])
-        # conf.setValue('nClosestPoints', self._config['nClosestPoints'])
-        # conf.setValue('treeArgs', self._config['treeArgs'])
-        # conf.setValue('fitVerbose', self._config['fitVerbose'])
-        # conf.setValue('fixedNodes', self._config['fixedNodes'])
-        # conf.setValue('GUI', self._config['GUI'])
-        conf.endGroup()
+        return json.dumps(self._config, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
-    def deserialize(self, location):
+    def deserialize(self, string):
         '''
-        Add code to deserialize this step from disk.  As with the serialize 
-        method the filename should use the step identifier.  Obviously the 
-        filename used here should be the same as the one used by the
-        serialize method.
+        Add code to deserialize this step from disk. Parses a json string
+        given by mapclient
         '''
-        configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
-        conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
-        conf.beginGroup('config')
-
-        for k, v in list(self._configDefaults.items()):
-            self._config[k] = conf.value(k, v)
-        # self._config['identifier'] = conf.value('identifier', '')
-        # self._config['GD'] = conf.value('GD', '5.0')
-        # self._config['sobelovD'] = conf.value('sobelovD', '[8,8]')
-        # self._config['sobelovW'] = conf.value('sobelovW', '[1e-6, 1e-6, 1e-6, 1e-6, 2e-6]')
-        # self._config['normalD'] = conf.value('normalD', '8')
-        # self._config['normalW'] = conf.value('normalW', '50.0')
-        # self._config['itMaxPerIt'] = conf.value('itMaxPerIt', '3')
-        # self._config['xtol'] = conf.value('xtol', '1e-6')
-        # self._config['itMax'] = conf.value('itMax', '5')
-        # self._config['mode'] = conf.value('mode', 'DPEP')
-        # self._config['nClosestPoints'] = conf.value('nClosestPoints', '1')
-        # self._config['treeArgs'] = conf.value('treeArgs', '{}')
-        # self._config['fitVerbose'] = conf.value('fitVerbose', 'True')
-        # self._config['fixedNodes'] = conf.value('fixedNodes', 'None')
-        # self._config['GUI'] = conf.value('GUI', 'True')
-        conf.endGroup()
+        self._config.update(json.loads(string))
 
         d = ConfigureDialog()
         d.identifierOccursCount = self._identifierOccursCount
