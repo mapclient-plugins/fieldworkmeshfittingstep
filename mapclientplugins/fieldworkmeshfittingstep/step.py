@@ -6,14 +6,13 @@ import os
 import json
 
 from PySide import QtGui
-from PySide import QtCore
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.fieldworkmeshfittingstep.configuredialog import ConfigureDialog
 from mapclientplugins.fieldworkmeshfittingstep.mayavifittingviewerwidget import MayaviFittingViewerWidget
 
 import copy
-from fieldwork.field.tools import fitting_tools
+from gias2.fieldwork.field.tools import fitting_tools
 import numpy as np
 
 
