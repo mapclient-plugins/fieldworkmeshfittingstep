@@ -145,10 +145,10 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
                 fitkwargs[v] = self._config[k]
             elif k=='fixed nodes':
                 inputStr = self._config[k]
-                if inputStr=='None':
-                    fitkwargs[v]=None
-                else:
-                    fixedNodes = []
+                fixedNodes = []
+                if (inputStr=='none') or (inputStr=='None') or (len(inputStr)==0):
+                    pass
+                else: 
                     words = inputStr.split(',')
                     for w in words:
                         if '-' in w:
@@ -156,7 +156,22 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
                             fixedNodes += range(int(x0), int(x1)+1)
                         else:
                             fixedNodes.append(int(w))
-                    fitkwargs[v] = fixedNodes
+
+                fitkwargs[v] = fixedNodes 
+
+                # inputStr = self._config[k]
+                # if inputStr=='None':
+                #     fitkwargs[v]=None
+                # else:
+                #     fixedNodes = []
+                #     words = inputStr.split(',')
+                #     for w in words:
+                #         if '-' in w:
+                #             x0,x1 = w.split('-')
+                #             fixedNodes += range(int(x0), int(x1)+1)
+                #         else:
+                #             fixedNodes.append(int(w))
+                #     fitkwargs[v] = fixedNodes
             else:
                 fitkwargs[v] = eval(self._config[k])
 
