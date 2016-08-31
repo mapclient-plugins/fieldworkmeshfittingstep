@@ -146,3 +146,8 @@ discretisation means e_d(P) will be a more accurate representation of
 the distance between the continuous mesh surface and target points. 
 However, higher discretisation will also result in longer fitting times.
 
+Fitting should be run a few iterations at a time. After a fit has 
+finished, clicking _fit_ again will perform another fit from the fitted
+mesh. In between fits, smoothing weights can be adjusted (usually 
+lessened) as the mesh gets closer to the pointcloud.
+
