@@ -1,4 +1,3 @@
-
 '''
 MAP Client Plugin Step
 '''
@@ -56,7 +55,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
 
     def __init__(self, location):
         super(FieldworkMeshFittingStep, self).__init__('Fieldwork Mesh Fitting', location)
-        self._configured = False # A step cannot be executed until it has been configured.
+        self._configured = False  # A step cannot be executed until it has been configured.
         self._category = 'Fitting'
         # Add any other initialisation code here:
         self._icon = QtGui.QImage(':/fieldworkmeshfittingstep/images/fieldworkmeshfittingicon.png')
@@ -118,7 +117,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         may be connected up to a button in a widget for example.
         '''
         # Put your execute step code here before calling the '_doneExecution' method.
-        if self._config['GUI']=='True':
+        if self._config['GUI'] == 'True':
             self._widget = MayaviFittingViewerWidget(self.data, self.GFUnfitted, self._config, self._fit, self._reset)
             # self._widget._ui.registerButton.clicked.connect(self._register)
             self._widget._ui.acceptButton.clicked.connect(self._doneExecution)
@@ -127,7 +126,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
             self._widget.setModal(True)
             self._setCurrentWidget(self._widget)
 
-        elif self._config['GUI']=='False':
+        elif self._config['GUI'] == 'False':
             self._fit()
             self.GFFitted = copy.deepcopy(self.GF)
             self._doneExecution()
@@ -140,23 +139,23 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         fitkwargs['dataWeights'] = self.dataWeights
         fitkwargs['fullErrors'] = True
         for k, v in list(self._fitConfigDict.items()):
-            if k=='fit mode':
+            if k == 'fit mode':
                 fitkwargs[v] = self._config[k]
-            elif k=='fixed nodes':
+            elif k == 'fixed nodes':
                 inputStr = self._config[k]
                 fixedNodes = []
-                if (inputStr=='none') or (inputStr=='None') or (len(inputStr)==0):
+                if (inputStr == 'none') or (inputStr == 'None') or (len(inputStr) == 0):
                     pass
-                else: 
+                else:
                     words = inputStr.split(',')
                     for w in words:
                         if '-' in w:
-                            x0,x1 = w.split('-')
-                            fixedNodes += range(int(x0), int(x1)+1)
+                            x0, x1 = w.split('-')
+                            fixedNodes += range(int(x0), int(x1) + 1)
                         else:
                             fixedNodes.append(int(w))
 
-                fitkwargs[v] = fixedNodes 
+                fitkwargs[v] = fixedNodes
 
                 # inputStr = self._config[k]
                 # if inputStr=='None':
@@ -217,12 +216,12 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         uses port for this step then the index can be ignored.
         '''
         if index == 0:
-            self.data = np.array(dataIn, dtype=float) # ju#pointcoordinates
+            self.data = np.array(dataIn, dtype=float)  # ju#pointcoordinates
         elif index == 1:
-            self.GF = dataIn   # ju#fieldworkmodel
+            self.GF = dataIn  # ju#fieldworkmodel
             self.GFUnfitted = copy.deepcopy(self.GF)
         else:
-            self.dataWeights = np.array(dataIn, dtype=float) # numpyarray1d - dataWeights
+            self.dataWeights = np.array(dataIn, dtype=float)  # numpyarray1d - dataWeights
 
     def getPortData(self, index):
         '''
@@ -231,13 +230,13 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         provides port for this step then the index can be ignored.
         '''
         if index == 3:
-            return self.GFFitted # ju#fieldworkmodel
+            return self.GFFitted  # ju#fieldworkmodel
         elif index == 4:
-            return self.GFParamsFitted # ju#fieldworkmodelparameters
+            return self.GFParamsFitted  # ju#fieldworkmodelparameters
         elif index == 5:
-            return self.RMSEFitted # float
+            return self.RMSEFitted  # float
         else:
-            return self.fitErrors # numpyarray1d
+            return self.fitErrors  # numpyarray1d
 
     def configure(self):
         '''
@@ -252,10 +251,10 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         dlg.setConfig(self._config)
         dlg.validate()
         dlg.setModal(True)
-        
+
         if dlg.exec_():
             self._config = dlg.getConfig()
-        
+
         self._configured = dlg.validate()
         self._configuredObserver()
 
@@ -289,4 +288,3 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         d.identifierOccursCount = self._identifierOccursCount
         d.setConfig(self._config)
         self._configured = d.validate()
-
