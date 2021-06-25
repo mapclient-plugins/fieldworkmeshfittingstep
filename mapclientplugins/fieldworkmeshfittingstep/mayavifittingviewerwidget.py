@@ -26,8 +26,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtCore import QThread, Signal
 
 from mapclientplugins.fieldworkmeshfittingstep.ui_mayavifittingviewerwidget import Ui_Dialog
-from traits.api import HasTraits, Instance, on_trait_change, \
-    Int, Dict
+from traits.api import on_trait_change
 
 from gias2.mappluginutils.mayaviviewer import MayaviViewerObjectsContainer, MayaviViewerDataPoints, \
     MayaviViewerFieldworkModel, colours
@@ -171,7 +170,7 @@ class MayaviFittingViewerWidget(QDialog):
         if tableItem.column() == self.objectTableHeaderColumns['visible']:
             # get visible status
             name = tableItem.text()
-            visible = tableItem.checkState().name == 'Checked'
+            visible = tableItem.checkState() == Qt.CheckState.Checked
 
             print('visibleboxchanged name', name)
             print('visibleboxchanged visible', visible)
@@ -268,7 +267,7 @@ class MayaviFittingViewerWidget(QDialog):
         for r in range(self._ui.tableWidget.rowCount()):
             tableItem = self._ui.tableWidget.item(r, self.objectTableHeaderColumns['visible'])
             name = tableItem.text()
-            visible = tableItem.checkState().name == 'Checked'
+            visible = tableItem.checkState() == Qt.CheckState.Checked
             obj = self._objects.getObject(name)
             print(obj.name)
             if obj.sceneObject:
