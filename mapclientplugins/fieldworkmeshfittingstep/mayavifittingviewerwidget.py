@@ -18,8 +18,7 @@ This file is part of MAP Client. (http://launchpad.net/mapclient)
     along with MAP Client.  If not, see <http://www.gnu.org/licenses/>..
 '''
 import os
-
-os.environ['ETS_TOOLKIT'] = 'qt'
+import copy
 
 from PySide2.QtWidgets import QDialog, QAbstractItemView, QTableWidgetItem
 from PySide2.QtCore import Qt
@@ -31,7 +30,8 @@ from traits.api import on_trait_change
 from gias2.mappluginutils.mayaviviewer import MayaviViewerObjectsContainer, MayaviViewerDataPoints, \
     MayaviViewerFieldworkModel, colours
 
-import copy
+
+os.environ['ETS_TOOLKIT'] = 'qt'
 
 
 class _ExecThread(QThread):
