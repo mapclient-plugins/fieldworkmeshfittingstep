@@ -37,7 +37,6 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
     _fitConfigDict['fixed nodes'] = 'fixedNodes'
 
     _configDefaults = {}
-    _configDefaults['identifier'] = ''
     _configDefaults['mesh discretisation'] = '5.0'
     _configDefaults['sobelov discretisation'] = '[8,8]'
     _configDefaults['sobelov weight'] = '[1e-6, 1e-6, 1e-6, 1e-6, 2e-6]'
@@ -55,8 +54,9 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
 
     def __init__(self, location):
         super(FieldworkMeshFittingStep, self).__init__('Fieldwork Mesh Fitting', location)
-        self._configured = False  # A step cannot be executed until it has been configured.
+        self._configured = True  # A step cannot be executed until it has been configured.
         self._category = 'Fitting'
+        self._identifier = ''
         # Add any other initialisation code here:
         self._icon = QtGui.QImage(':/fieldworkmeshfittingstep/images/fieldworkmeshfittingicon.png')
         # Ports:
@@ -246,7 +246,6 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
             self._configured = True
         '''
         dlg = ConfigureDialog(self._main_window)
-        dlg.identifierOccursCount = self._identifierOccursCount
         dlg.setConfig(self._config)
         dlg.validate()
         dlg.setModal(True)
@@ -261,13 +260,13 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         '''
         The identifier is a string that must be unique within a workflow.
         '''
-        return self._config['identifier']
+        return self._identifier
 
     def setIdentifier(self, identifier):
         '''
         The framework will set the identifier for this step when it is loaded.
         '''
-        self._config['identifier'] = identifier
+        self._identifier = identifier
 
     def serialize(self):
         '''
@@ -284,6 +283,5 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         self._config.update(json.loads(string))
 
         d = ConfigureDialog()
-        d.identifierOccursCount = self._identifierOccursCount
         d.setConfig(self._config)
         self._configured = d.validate()
