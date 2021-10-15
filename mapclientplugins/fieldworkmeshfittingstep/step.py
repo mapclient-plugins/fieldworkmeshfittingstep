@@ -1,6 +1,6 @@
-'''
+"""
 MAP Client Plugin Step
-'''
+"""
 import json
 
 from PySide2 import QtGui
@@ -15,10 +15,10 @@ import numpy as np
 
 
 class FieldworkMeshFittingStep(WorkflowStepMountPoint):
-    '''
-    Step for fitting fieldwork models to data clouds by optimising nodal 
+    """
+    Step for fitting fieldwork models to data clouds by optimising nodal
     parameters subject to Sobelov and normal smoothing penalties.
-    '''
+    """
 
     # maps config keys to fitting function argument names
     _fitConfigDict = {}
@@ -111,11 +111,11 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         self._widget = None
 
     def execute(self):
-        '''
+        """
         Add your code here that will kick off the execution of the step.
         Make sure you call the _doneExecution() method when finished.  This method
         may be connected up to a button in a widget for example.
-        '''
+        """
         # Put your execute step code here before calling the '_doneExecution' method.
         if self._config['GUI'] == 'True':
             self._widget = MayaviFittingViewerWidget(self.data, self.GFUnfitted, self._config, self._fit, self._reset)
@@ -209,11 +209,11 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         self.GF = copy.deepcopy(self.GFUnfitted)
 
     def setPortData(self, index, dataIn):
-        '''
+        """
         Add your code here that will set the appropriate objects for this step.
         The index is the index of the port in the port list.  If there is only one
         uses port for this step then the index can be ignored.
-        '''
+        """
         if index == 0:
             self.data = np.array(dataIn, dtype=float)  # ju#pointcoordinates
         elif index == 1:
@@ -223,11 +223,11 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
             self.dataWeights = np.array(dataIn, dtype=float)  # numpyarray1d - dataWeights
 
     def getPortData(self, index):
-        '''
+        """
         Add your code here that will return the appropriate objects for this step.
         The index is the index of the port in the port list.  If there is only one
         provides port for this step then the index can be ignored.
-        '''
+        """
         if index == 3:
             return self.GFFitted  # ju#fieldworkmodel
         elif index == 4:
@@ -238,13 +238,13 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
             return self.fitErrors  # numpyarray1d
 
     def configure(self):
-        '''
+        """
         This function will be called when the configure icon on the step is
         clicked.  It is appropriate to display a configuration dialog at this
         time.  If the conditions for the configuration of this step are complete
         then set:
             self._configured = True
-        '''
+        """
         dlg = ConfigureDialog(self._main_window)
         dlg.setConfig(self._config)
         dlg.validate()
@@ -257,29 +257,29 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         self._configuredObserver()
 
     def getIdentifier(self):
-        '''
+        """
         The identifier is a string that must be unique within a workflow.
-        '''
+        """
         return self._identifier
 
     def setIdentifier(self, identifier):
-        '''
+        """
         The framework will set the identifier for this step when it is loaded.
-        '''
+        """
         self._identifier = identifier
 
     def serialize(self):
-        '''
+        """
         Add code to serialize this step to disk. Returns a json string for
         mapclient to serialise.
-        '''
+        """
         return json.dumps(self._config, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def deserialize(self, string):
-        '''
+        """
         Add code to deserialize this step from disk. Parses a json string
         given by mapclient
-        '''
+        """
         self._config.update(json.loads(string))
 
         d = ConfigureDialog()
