@@ -1,7 +1,7 @@
-'''
+"""
 MAP Client, a program to generate detailed musculoskeletal models for OpenSim.
     Copyright (C) 2012  University of Auckland
-    
+
 This file is part of MAP Client. (http://launchpad.net/mapclient)
 
     MAP Client is free software: you can redistribute it and/or modify
@@ -16,10 +16,9 @@ This file is part of MAP Client. (http://launchpad.net/mapclient)
 
     You should have received a copy of the GNU General Public License
     along with MAP Client.  If not, see <http://www.gnu.org/licenses/>..
-'''
+"""
 import os
-
-os.environ['ETS_TOOLKIT'] = 'qt'
+import copy
 
 from PySide2.QtWidgets import QDialog, QAbstractItemView, QTableWidgetItem
 from PySide2.QtCore import Qt
@@ -31,7 +30,7 @@ from traits.api import on_trait_change
 from gias2.mappluginutils.mayaviviewer import MayaviViewerObjectsContainer, MayaviViewerDataPoints, \
     MayaviViewerFieldworkModel, colours
 
-import copy
+os.environ['ETS_TOOLKIT'] = 'qt'
 
 
 class _ExecThread(QThread):
@@ -48,9 +47,9 @@ class _ExecThread(QThread):
 
 
 class MayaviFittingViewerWidget(QDialog):
-    '''
+    """
     Configure dialog to present the user with the options to configure this step.
-    '''
+    """
     defaultColor = colours['bone']
     objectTableHeaderColumns = {'visible': 0, 'type': 1}
     backgroundColour = (0.0, 0.0, 0.0)
@@ -65,9 +64,9 @@ class MayaviFittingViewerWidget(QDialog):
                           'n closest points', 'verbose', 'fixed nodes', 'GUI')
 
     def __init__(self, data, GFUnfitted, config, fitFunc, resetCallback, parent=None):
-        '''
+        """
         Constructor
-        '''
+        """
         QDialog.__init__(self, parent)
         self._ui = Ui_Dialog()
         self._ui.setupUi(self)
