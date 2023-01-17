@@ -28,8 +28,8 @@ from PySide2.QtCore import QThread, Signal
 from mapclientplugins.fieldworkmeshfittingstep.ui_mayavifittingviewerwidget import Ui_Dialog
 from traits.api import on_trait_change
 
-from gias2.mappluginutils.mayaviviewer import MayaviViewerObjectsContainer, MayaviViewerDataPoints, \
-    MayaviViewerFieldworkModel, colours
+from gias3.mapclientpluginutilities.viewers import MayaviViewerObjectsContainer, MayaviViewerFieldworkModel, colours
+from gias3.mapclientpluginutilities.viewers.mayaviviewerdatapoints import MayaviViewerDataPoints
 
 import copy
 

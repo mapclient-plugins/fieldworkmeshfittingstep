@@ -10,7 +10,7 @@ from mapclientplugins.fieldworkmeshfittingstep.configuredialog import ConfigureD
 from mapclientplugins.fieldworkmeshfittingstep.mayavifittingviewerwidget import MayaviFittingViewerWidget
 
 import copy
-from gias2.fieldwork.field.tools import fitting_tools
+from gias3.fieldwork.field.tools import fitting_tools
 import numpy as np
 
 

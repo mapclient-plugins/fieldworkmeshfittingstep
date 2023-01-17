@@ -18,19 +18,20 @@ Engineering, 25, 96–111.
 
 Requires
 --------
-- GIAS2 : https://bitbucket.org/jangle/gias2
+- GIAS3 - Fieldwork: https://github.com/musculoskeletal/gias3.fieldwork
+- GIAS3 - MAP Client Plugin Utilities: https://github.com/musculoskeletal/gias3.mapclientpluginutilities
 
 Inputs
 ------
 - **pointcloud** [nx3 NumPy Array] : The target point cloud.
-- **fieldworkmodel** [GIAS2 GeometricField instance] : The Fieldwork
+- **fieldworkmodel** [GIAS3 GeometricField instance] : The Fieldwork
     mesh to be fitted.
 - **array1d** [1-D NumPy Array] : An array of weights for each target
     point.
 
 Outputs
 -------
-- **fieldworkmodel** [GIAS2 GeometricField instance] : The fitted slave
+- **fieldworkmodel** [GIAS3 GeometricField instance] : The fitted slave
     mesh.
 - **fieldworkmodelparameters** [NumPy Array] : An array of the fitted
     slave mesh parameters.
