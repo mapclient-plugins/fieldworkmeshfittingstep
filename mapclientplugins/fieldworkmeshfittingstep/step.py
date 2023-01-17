@@ -23,18 +23,18 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
     # maps config keys to fitting function argument names
     _fitConfigDict = {}
     _fitConfigDict['mesh discretisation'] = 'GD'
-    _fitConfigDict['sobelov discretisation'] = 'sobD'
-    _fitConfigDict['sobelov weight'] = 'sobW'
-    _fitConfigDict['normal discretisation'] = 'normalD'
-    _fitConfigDict['normal weight'] = 'normalW'
-    _fitConfigDict['max sub-iterations'] = 'itMaxPerIt'
+    _fitConfigDict['sobelov discretisation'] = 'sob_d'
+    _fitConfigDict['sobelov weight'] = 'sob_w'
+    _fitConfigDict['normal discretisation'] = 'normal_d'
+    _fitConfigDict['normal weight'] = 'normal_w'
+    _fitConfigDict['max sub-iterations'] = 'it_max_per_it'
     _fitConfigDict['xtol'] = 'xtol'
-    _fitConfigDict['max iterations'] = 'itMax'
-    _fitConfigDict['fit mode'] = 'gObjType'
-    _fitConfigDict['n closest points'] = 'nClosestPoints'
-    _fitConfigDict['kdtree args'] = 'treeArgs'
-    _fitConfigDict['verbose'] = 'fitVerbose'
-    _fitConfigDict['fixed nodes'] = 'fixedNodes'
+    _fitConfigDict['max iterations'] = 'it_max'
+    _fitConfigDict['fit mode'] = 'g_obj_type'
+    _fitConfigDict['n closest points'] = 'n_closest_points'
+    _fitConfigDict['kdtree args'] = 'tree_args'
+    _fitConfigDict['verbose'] = 'fit_verbose'
+    _fitConfigDict['fixed nodes'] = 'fixed_nodes'
 
     _configDefaults = {}
     _configDefaults['identifier'] = ''
@@ -135,8 +135,8 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         fitkwargs = {}
         fitkwargs['GF'] = self.GF
         fitkwargs['data'] = self.data
-        fitkwargs['dataWeights'] = self.dataWeights
-        fitkwargs['fullErrors'] = True
+        fitkwargs['data_weights'] = self.dataWeights
+        fitkwargs['full_errors'] = True
         for k, v in list(self._fitConfigDict.items()):
             if k == 'fit mode':
                 fitkwargs[v] = self._config[k]
@@ -185,7 +185,7 @@ class FieldworkMeshFittingStep(WorkflowStepMountPoint):
         else:
             callback = None
 
-        fitkwargs['fitOutputCallback'] = callback
+        fitkwargs['fit_output_callback'] = callback
 
         # call fitting functions
         (GFFitted, paramsFitted, RMSEFitted, errorsFitted) = fitting_tools.fitSurfacePerItSearch(**fitkwargs)

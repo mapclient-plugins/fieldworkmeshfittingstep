@@ -89,11 +89,11 @@ class MayaviFittingViewerWidget(QDialog):
 
         # create self._objects
         self._objects = MayaviViewerObjectsContainer()
-        self._objects.addObject('data', MayaviViewerDataPoints('data', self._data, renderArgs=self._dataRenderArgs))
+        self._objects.addObject('data', MayaviViewerDataPoints('data', self._data, render_args=self._dataRenderArgs))
         self._objects.addObject('GF Unfitted', MayaviViewerFieldworkModel('GF Unfitted', self._GFUnfitted, self._GFD,
-                                                                          renderArgs=self._GFUnfittedRenderArgs))
+                                                                          render_args=self._GFUnfittedRenderArgs))
         self._objects.addObject('GF Fitted', MayaviViewerFieldworkModel('GF Fitted', self._GFFitted, self._GFD,
-                                                                        renderArgs=self._GFFittedRenderArgs))
+                                                                        render_args=self._GFFittedRenderArgs))
 
         self._makeConnections()
         self._initialiseObjectTable()
